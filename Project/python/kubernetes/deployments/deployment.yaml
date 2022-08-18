@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-deploy
+spec:
+  selector:
+    matchLabels:
+      app: example-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: example-app
+    spec:
+      containers:
+      - name: example-app
+        image: vaa123/heart-disease-pred:latest
+        ports:
+        - containerPort: 5000
+---
+# https://kubernetes.io/docs/concepts/services-networking/service/#defining-a-service
+kind: Service
+apiVersion: v1
+metadata:
+  name: example-service
+spec:
+  selector:
+    app: example-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
+    nodePort: 31000
+  type: NodePort
+
+
+
+
